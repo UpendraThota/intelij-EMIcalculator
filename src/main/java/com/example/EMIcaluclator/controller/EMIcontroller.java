@@ -60,7 +60,7 @@ public class EMIcontroller {
             throw new timecannotbeNull("Time cannot be zero");
         }
 
-        return callemi.bestHOMELOAN(principal, time);
+        return callemi.bestHomeLoan(principal, time);
     }
 
 
@@ -78,7 +78,7 @@ public class EMIcontroller {
             throw new timecannotbeNull("Time cannot be zero");
         }
 
-        return callemi.bestPERSONALLOAN(principal, time);
+        return callemi.bestPersonalLoan(principal, time);
     }
 
 }

@@ -60,7 +60,7 @@ public class callEMIImpl implements callEMI {
     }
 
     @Override
-    public Map<String, Double> bestHOMELOAN(Double principal, Integer time) {
+    public Map<String, Double> bestHomeLoan(Double principal, Integer time) {
         Map<String, Double> rates;
         rates=LoanRatesProvider.getHomeLoanRates();
 
@@ -89,7 +89,7 @@ public class callEMIImpl implements callEMI {
 
 
     @Override
-    public Map<String, Double> bestPERSONALLOAN(Double principal, Integer time) {
+    public Map<String, Double> bestPersonalLoan(Double principal, Integer time) {
         Map<String, Double> rates;
 
         rates=LoanRatesProvider.getPersonalLoanRates();

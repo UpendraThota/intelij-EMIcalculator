@@ -96,7 +96,7 @@ public class callEMIImplTest {
         double principal = 100000;
         int time = 10;
 
-        Map<String, Double> result = emiService.bestHOMELOAN(principal, time);
+        Map<String, Double> result = emiService.bestHomeLoan(principal, time);
 
         String res="";
         Double val=0.0;
@@ -116,7 +116,7 @@ public class callEMIImplTest {
         double principal = 100000;
         int time = 5;
 
-        Map<String, Double> result = emiService.bestPERSONALLOAN(principal, time);
+        Map<String, Double> result = emiService.bestPersonalLoan(principal, time);
 
 
 
