@@ -26,6 +26,13 @@ public class GlobalExceptionHandler
     public ResponseEntity<?> handleInvalidtime(timecannotbeNull ex) {
         return buildResponse("Bad Request", ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleInvalidtype(IllegalArgumentException ex) {
+        return buildResponse("Bad Request", ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneral(Exception ex) {
         return buildResponse("Internal Server Error", "An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);

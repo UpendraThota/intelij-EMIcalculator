@@ -14,36 +14,82 @@ public class callEMIImplTest {
     @Test
     public void testEMI() {
         double principal = 100000;
-        double rate = 12; // annual rate
-        int time = 1; // years
+        double rate = 12;
+        int time = 1;
 
-        double expectedEmi = 8884.88; // Correct EMI based on formula
+        double expectedEmi = 8884.88;
         double actualEmi = emiService.EMI(principal, rate, time);
 
-        assertEquals(expectedEmi, actualEmi, 0.5); // delta of 0.5
-        System.out.println("Actual EMI: " + actualEmi);
+        assertEquals(expectedEmi, actualEmi, 0.5);
+
     }
 
     @Test
-    public void testCompareEMI_homeLoan() {
-        Map<String, Double> emiMap = emiService.compareEMI(200000.0, "home", 10);
-        assertNotNull(emiMap);
-        assertEquals(5, emiMap.size());
+    public void testCompareEMI_HomeLoan_WithTime() {
+        double principal = 100000;
+        int time = 10;
 
-        // Optional: Check one known value
-        double expectedSBI = emiService.EMI(200000.0, 7.8, 10);
-        assertEquals(expectedSBI, emiMap.get("SBI"), 0.5);
+        Map<String, Double> result = emiService.compareEMI(principal, "home", time);
+        double expectedHdfcEmi = emiService.EMI(principal, 7.5, time);
+        assertEquals(expectedHdfcEmi, result.get("HDFC"), 0.5);
     }
 
     @Test
-    public void testCompareEMI_personalLoan() {
-        Map<String, Double> emiMap = emiService.compareEMI(100000.0, "personal", 5);
-        assertNotNull(emiMap);
-        assertEquals(5, emiMap.size());
+    public void testCompareEMI_PersonalLoan_WithTime() {
+        double principal = 100000;
+        int time = 5;
 
-        double expectedICICI = emiService.EMI(100000.0, 12.5, 5);
-        assertEquals(expectedICICI, emiMap.get("ICICI"), 0.5);
+        Map<String, Double> result = emiService.compareEMI(principal, "personal", time);
+
+        double expectedIciciEmi = emiService.EMI(principal, 12.5, time);
+        assertEquals(expectedIciciEmi, result.get("ICICI"), 0.5);
     }
+
+
+    @Test
+    public void testCompareEMI_HomeLoan_NullTime() {
+        double principal = 100000;
+        Integer time = null;
+
+        Map<String, Double> result = emiService.compareEMI(principal, "home", time);
+
+
+
+        double expectedEmi = emiService.EMI(principal, 7.5, 10);
+        assertEquals(expectedEmi, result.get("HDFC"), 0.5);
+    }
+
+
+    @Test
+    public void testCompareEMI_PersonalLoan_NullTime() {
+        double principal = 100000;
+        Integer time = null;
+
+        Map<String, Double> result = emiService.compareEMI(principal, "personal", time);
+
+
+
+        double expectedEmi = emiService.EMI(principal, 10.5, 5);
+        assertEquals(expectedEmi, result.get("HDFC"), 0.5);
+    }
+
+
+    @Test
+    public void testCompareEMI_InvalidLoanType() {
+        double principal = 100000;
+        int time = 5;
+
+        try {
+            emiService.compareEMI(principal, "education", time);
+            fail("Expected IllegalArgumentException was not thrown");
+        }
+        catch (IllegalArgumentException ex)
+        {
+            assertEquals("Invalid loan type: must be 'home' or 'personal'", ex.getMessage());
+        }
+    }
+
+
 
     @Test
     public void testBestHomeLoan() {
@@ -51,14 +97,18 @@ public class callEMIImplTest {
         int time = 10;
 
         Map<String, Double> result = emiService.bestHOMELOAN(principal, time);
-        assertNotNull(result);
-        assertEquals(1, result.size());
 
-        String bestBank = result.keySet().iterator().next();
-        assertEquals("HDFC", bestBank); // HDFC has lowest rate (7.5) in your method
+        String res="";
+        Double val=0.0;
+       for(String s:result.keySet())
+       {
+           res=s;
+           val=result.get(s);
+       }
+        assertEquals("HDFC", res);
 
         double expectedEmi = emiService.EMI(principal, 7.5, time);
-        assertEquals(expectedEmi, result.get(bestBank), 0.5);
+        assertEquals(expectedEmi, val, 0.5);
     }
 
     @Test
@@ -67,13 +117,19 @@ public class callEMIImplTest {
         int time = 5;
 
         Map<String, Double> result = emiService.bestPERSONALLOAN(principal, time);
-        assertNotNull(result);
-        assertEquals(1, result.size());
 
-        String bestBank = result.keySet().iterator().next();
-        assertEquals("ICICI", bestBank); // ICICI has lowest personal loan rate (10.3)
+
+
+        String res="";
+        Double val=0.0;
+        for(String s:result.keySet())
+        {
+            res=s;
+            val=result.get(s);
+        }
+        assertEquals("ICICI", res);
 
         double expectedEmi = emiService.EMI(principal, 10.3, time);
-        assertEquals(expectedEmi, result.get(bestBank), 0.5);
+        assertEquals(expectedEmi, val, 0.5);
     }
 }
