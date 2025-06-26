@@ -41,7 +41,7 @@ public class callEMIImplTest {
 
         Map<String, Double> result = emiService.compareEMI(principal, "personal", time);
 
-        double expectedIciciEmi = emiService.EMI(principal, 12.5, time);
+        double expectedIciciEmi = emiService.EMI(principal, 10.3, time);
         assertEquals(expectedIciciEmi, result.get("ICICI"), 0.5);
     }
 

@@ -1,4 +1,6 @@
 package com.example.EMIcaluclator.service;
+import com.example.EMIcaluclator.service.LoanRatesProvider;
+
 
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,7 @@ public class callEMIImpl implements callEMI {
 
     @Override
     public double EMI(double principal, double rate, int time) {
+        //System.out.println("uppu");
         double monthlyRate = rate / (12 * 100);
         int totalMonths = time * 12;
 
@@ -22,13 +25,10 @@ public class callEMIImpl implements callEMI {
     public Map<String, Double> compareEMI(Double principal, String typeOfLoan, Integer time) {
         Map<String, Double> rates = new HashMap<>();
 
-        if ("home".equalsIgnoreCase(typeOfLoan)) {
+        if ("home".equalsIgnoreCase(typeOfLoan))
+        {
 
-            rates.put("HDFC", 7.5);
-            rates.put("SBI", 7.8);
-            rates.put("LIC", 8.5);
-            rates.put("AXIS", 8.7);
-            rates.put("ICICI", 9.5);
+            rates = LoanRatesProvider.getHomeLoanRates();
             if (time == null)
             {
                 time = 10;
@@ -36,12 +36,9 @@ public class callEMIImpl implements callEMI {
         }
         else if ("personal".equalsIgnoreCase(typeOfLoan))
         {
+            rates = LoanRatesProvider.getPersonalLoanRates();
 
-            rates.put("HDFC", 10.5);
-            rates.put("SBI", 11.2);
-            rates.put("LIC", 12.0);
-            rates.put("AXIS", 11.5);
-            rates.put("ICICI", 12.5);
+
             if (time == null)
             {
                 time = 5;
@@ -64,12 +61,9 @@ public class callEMIImpl implements callEMI {
 
     @Override
     public Map<String, Double> bestHOMELOAN(Double principal, Integer time) {
-        Map<String, Double> rates = new HashMap<>();
-        rates.put("HDFC", 7.5);
-        rates.put("SBI", 7.8);
-        rates.put("LIC", 8.5);
-        rates.put("AXIS", 8.7);
-        rates.put("ICICI", 9.5);
+        Map<String, Double> rates;
+        rates=LoanRatesProvider.getHomeLoanRates();
+
 
         String bestBank = "";
         double lowestRate = Double.MAX_VALUE;
@@ -96,13 +90,9 @@ public class callEMIImpl implements callEMI {
 
     @Override
     public Map<String, Double> bestPERSONALLOAN(Double principal, Integer time) {
-        Map<String, Double> rates = new HashMap<>();
-        rates.put("HDFC", 10.5);
-        rates.put("SBI", 11.2);
-        rates.put("LIC", 12.0);
-        rates.put("AXIS", 11.5);
-        rates.put("ICICI", 10.3);
+        Map<String, Double> rates;
 
+        rates=LoanRatesProvider.getPersonalLoanRates();
         String bestBank = "";
         double lowestRate = Double.MAX_VALUE;
 
